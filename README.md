@@ -1,6 +1,6 @@
 # NSGTA NSPD 重打包工具
 
-将解压后的 NSPD 目录直接打成 NSP，不再依赖底包模板，Program romfs 为空。
+将解压后的 NSPD 目录直接打包成 NSP，不再依赖底包模板，Program romfs 为空。
 
 ## 原理
 
@@ -20,71 +20,65 @@
 
 ```
 RepackWorkflow/
+├── Tools/                       # 外部工具（hacpack、hactool、prod.keys）
+│   ├── hacpack-v1.36_r2_GUI/
+│   ├── keys 21.2.0/
+│   └── hactool.exe
 ├── src/
-│   ├── __init__.py          # 包标记
-│   ├── repack.py            # 核心重打包逻辑 (跨平台 Python)
-│   └── gui.py               # Tkinter 图形界面 (跨平台)
+│   ├── __init__.py              # 包标记
+│   ├── repack.py                # 核心重打包逻辑（跨平台 Python）
+│   └── gui.py                   # Tkinter 图形界面（跨平台）
 ├── scripts/
-│   └── Repack-FromNspdCode.ps1  # Windows PowerShell 版 (备用)
-├── nsp_repack_gui.py        # 入口 shim (向后兼容)
-├── Drag-NSPD-Here.cmd       # Windows 拖放入口
-├── build_exe.ps1            # Windows PyInstaller 构建脚本
-├── pyproject.toml           # Python 包定义
-├── requirements.txt         # 依赖 (仅 pyinstaller)
-├── .gitignore               # 忽略运行产物
-├── README.md
-└── USAGE_EN.md
+│   └── Repack-FromNspdCode.ps1  # Windows PowerShell 版（备用）
+├── nsp_repack_gui.py            # 入口文件（向后兼容）
+├── Drag-NSPD-Here.cmd           # Windows 拖放入口
+├── build_exe.ps1                # PyInstaller 构建脚本
+├── pyproject.toml               # Python 包定义
+├── requirements.txt             # 依赖（仅 pyinstaller）
+├── .gitignore                   # 忽略运行产物
+├── README.md                    # 本文件
+└── USAGE_EN.md                  # 英文说明
 ```
 
 运行时输出目录：
 
 - `outputs/` — 每次打包生成的 NSP、NCA、日志、manifest.json
-- `work/` — 每次打包的临时底包副本
+- `work/` — 每次打包的临时工作目录
 
 ## 使用方法
 
-### 图形界面 (推荐)
+### 图形界面（推荐）
 
-运行构建好的 `NSPDRepackGUI.exe`，选择解压后的 `.nspd` 目录，点击 Start repack。
+运行构建好的 `dist/NSPDRepackGUI.exe`，选择解压后的 `.nspd` 目录，点击「Start repack」即可。
 
 ### 命令行
 
 ```bash
-# 跨平台 (Python)
+# 跨平台（Python）
 python src/repack.py -NspdPath "path/to/game.nspd"
 
-# Windows (PowerShell 备用)
+# Windows（PowerShell 备用）
 powershell -ExecutionPolicy Bypass -File scripts\Repack-FromNspdCode.ps1 -NspdPath "path\to\game.nspd"
 ```
 
-### 拖放 (Windows)
+### 拖放（Windows）
 
 把 `.nspd` 文件夹拖到 `Drag-NSPD-Here.cmd` 上。
 
 ## 构建 EXE
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\build_exe.ps1 -Clean
+powershell -ExecutionPolicy Bypass -File .\build_exe.ps1
 ```
 
-工具 (hacpack/hactool/prod.keys) 需要放在项目上级目录：
-
-```
-<ProjectRoot>/
-├── RepackWorkflow/
-│   └── ...
-├── Tools/
-│   ├── hacpack-v1.36_r2_GUI/hacpack.exe
-│   ├── hactool.exe
-│   └── keys 21.2.0/prod.keys
-```
+所有必需的外部工具（hacpack、hactool、prod.keys）已包含在项目 `Tools/` 目录下，无需额外配置。
 
 ## 跨平台说明
 
-- 核心逻辑 (`src/repack.py`) 使用纯 Python + `pathlib`，支持 Windows / Linux / macOS。
-- GUI (`src/gui.py`) 使用 Tkinter，三大平台均可运行。
-- 外部工具 (hacpack / hactool) 为 Windows 原生程序，Linux/macOS 用户需自行编译或使用 Wine。
-- 可通过 `pip install .` 安装为系统命令：`nspd-repack` (命令行) / `nspd-repack-gui` (界面)。
+- 核心逻辑（`src/repack.py`）使用纯 Python + `pathlib`，支持 Windows / Linux / macOS。
+- GUI（`src/gui.py`）使用 Tkinter，三大平台均可运行。
+- 外部工具（hacpack / hactool）为 Windows 原生程序，Linux/macOS 用户需自行编译或使用 Wine。
+- 可通过 `pip install .` 安装为系统命令：`nspd-repack`（命令行）/ `nspd-repack-gui`（界面）。
 
 ## 输出内容
 
