@@ -1,0 +1,71 @@
+v1.36-r2
+hacPack-GUI:
+Fixed a bug cause hacPack-GUI to display invalid titleid error while titleid is valid
+
+v1.36
+Fixed a bug cause titletype error when creating metadata nca with cnmt
+Changed Valid titleid range
+
+v1.35
+Added option for setting nca distribution type to gamecard
+Removed --noromfs and --nologo options, hacPack now skips creating romfs and logo sections for program nca if romfsdir and logodir are not set
+Changed pfs0 padding size and hash table block size for better compatiblity and less nca size
+
+v1.33
+Added support for keygeneration 7
+Changed default ncasig to zero
+
+v1.32
+Changed hash block size for better compatibility
+Increased NCA section encryption buffer size
+
+v1.31
+Fixed a bug cause invalid IVFC level 6 when romfs section is big
+
+v1.30
+Added TitleKey encryption
+Added Signature generation
+Added NPDM verification and signature zeroing
+Added NPDM backup
+Fixed sdkversion valid range
+
+hacPackTools-NACP v1.03:
+Fixed videocapture invalid value error message
+Added error message for unknown xml elements
+
+v1.20-r3
+hacPackTools-NACP v1.02:
+Fixed a bug cause compiled version of hacPackTools-NACP not running on windows machines
+
+v1.20-r2
+hacPackTools-NACP v1.01:
+Added RequiredNetworkServiceLicenseOnLaunch and UserAccountSwitchLock options for hacPackTools-NACP
+
+v1.20
+hacPack:
+Added option for creating Metadata nca from cnmt
+hacPack-GUI:
+Added option for creating Metadata nca from cnmt in gui
+hacPackTools:
+Added hacPackTools-NACP v1.00
+
+v1.12
+Fixed a bug cause making bad PFS0 for files larger than 4GB in 32-bit platforms
+
+v1.11
+Added buffer for creating PFS0
+Increased buffer size for creating RomFS
+
+v1.10
+Added support for creating SystemProgram and SystemData Metadata NCA
+Added titleversion option for creating Metadata NCA
+
+v1.02
+GUI:
+Fixed a bug cause failure of building meta ncas with legal information nca and without data nca
+
+v1.01
+Fixed a bug cause failure of control.nacp validation in titles without AmericanEnglish title name and title author
+
+v1.00
+Initial Release.

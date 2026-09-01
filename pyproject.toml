@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "nspd-repack"
+version = "1.1.0"
+description = "NSPD to NSP repack tool for Nintendo Switch game updates"
+authors = [{name = "NSGTA"}]
+license = {text = "MIT"}
+requires-python = ">=3.10"
+keywords = ["nintendo", "switch", "nsp", "nspd", "repack"]
+
+[project.scripts]
+nspd-repack = "src.repack:main"
+nspd-repack-gui = "src.gui:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
