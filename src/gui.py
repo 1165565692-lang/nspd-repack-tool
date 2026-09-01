@@ -50,10 +50,12 @@ if FROZEN:
     HACPACK_PATH = RESOURCE_ROOT / "Tools" / "hacpack.exe"
     HACTOOL_PATH = RESOURCE_ROOT / "Tools" / "hactool.exe"
     KEYS_PATH = RESOURCE_ROOT / "Tools" / "prod.keys"
+    ROMFS_BASE_PATH = RESOURCE_ROOT / "Tools" / "romfs_base"
 else:
     HACPACK_PATH = APP_DIR / "Tools" / "hacpack-v1.36_r2_GUI" / "hacpack.exe"
     HACTOOL_PATH = APP_DIR / "Tools" / "hactool.exe"
     KEYS_PATH = APP_DIR / "Tools" / "keys 21.2.0" / "prod.keys"
+    ROMFS_BASE_PATH = APP_DIR / "Tools" / "romfs_base"
 
 
 def project_root() -> Path:
@@ -205,6 +207,7 @@ class RepackApp(tk.Tk):
                 hacpack_path=HACPACK_PATH,
                 hactool_path=HACTOOL_PATH,
                 keys_path=KEYS_PATH,
+                romfs_base=ROMFS_BASE_PATH,
                 no_verify=False,
             )
             repacker.run()

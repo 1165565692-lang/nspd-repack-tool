@@ -25,6 +25,7 @@ class Repacker:
         hacpack_path: Optional[Path] = None,
         hactool_path: Optional[Path] = None,
         keys_path: Optional[Path] = None,
+        romfs_base: Optional[Path] = None,
         no_verify: bool = False,
         base_unpacked: Optional[Path] = None,  # Kept for compatibility
     ):
@@ -39,21 +40,21 @@ class Repacker:
             hacpack_path = workflow_root / "Tools" / "hacpack-v1.36_r2_GUI" / "hacpack"
             if not hacpack_path.exists():
                 hacpack_path = workflow_root / "Tools" / "hacpack-v1.36_r2_GUI" / "hacpack.exe"
-
+            if not hacpack_path.exists():
+                hacpack_path = workflow_root / "Tools" / "hacpack.exe"
         if hactool_path is None:
             hactool_path = workflow_root / "Tools" / "hactool"
             if not hactool_path.exists():
                 hactool_path = workflow_root / "Tools" / "hactool.exe"
-
         if keys_path is None:
             keys_path = workflow_root / "Tools" / "keys 21.2.0" / "prod.keys"
+        if romfs_base is None:
+            romfs_base = workflow_root / "Tools" / "romfs_base"
 
         self.hacpack_path = hacpack_path.resolve()
         self.hactool_path = hactool_path.resolve()
         self.keys_path = keys_path.resolve()
-
-        # Base romfs template (from a working NSP)
-        self.romfs_base = workflow_root / "Tools" / "romfs_base"
+        self.romfs_base = romfs_base.resolve()
 
         self._validate_paths()
 
