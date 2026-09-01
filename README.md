@@ -1,48 +1,57 @@
 # NSGTA NSPD to NSP Repack Tool
 
-Convert an unpacked NSPD directory directly to an installable NSP, no base template required, Program romfs is left empty.
+Convert an unpacked NSPD directory to an installable NSP. Program romfs is pre-populated from a working base NSP — included in the project so no extra setup is required.
 
 ## How it works
 
 1. Extract `program0.ncd\code`, `program0.ncd\logo`, and `control0.ncd\data` from the NSPD.
 2. Create a fresh working directory structure:
    - `program/exefs/` ← NSPD code
-   - `program/romfs/` ← **empty** (no base romfs retained)
+   - `program/romfs/` ← **pre-populated from `Tools/romfs_base/`** (extracted from a working NSP)
    - `program/section2_pfs0/` ← NSPD logo (optional)
    - `control/romfs/` ← NSPD control data (optional)
 3. Regenerate Program / Control / Meta NCAs using `hacpack` + `prod.keys`.
 4. Pack into a single NSP and verify with `hactool`.
 5. Output `manifest.json` with run information.
 
-No base unpacked template is needed anymore. Program RomFS is left empty. If your game requires specific RomFS assets, mount them via LayeredFS or a mod.
+No external base template is needed. The romfs skeleton is already bundled under `Tools/romfs_base/`.
 
 ## Project Structure
 
 ```
 RepackWorkflow/
-├── Tools/                       # External tools (hacpack, hactool, prod.keys)
+├── Tools/                       # External tools + bundled romfs
 │   ├── hacpack-v1.36_r2_GUI/
+│   │   └── hacpack.exe
 │   ├── keys 21.2.0/
-│   └── hactool.exe
+│   │   └── prod.keys
+│   ├── hactool.exe
+│   └── romfs_base/              # RomFS extracted from a working NSP
+│       ├── common.rpf
+│       ├── switch/
+│       │   ├── switcha.rpf ... switchw.rpf
+│       │   └── audio/
+│       └── update/
+│           ├── update.rpf
+│           └── update2.rpf
 ├── src/
-│   ├── __init__.py              # Package marker
+│   ├── __init__.py
 │   ├── repack.py                # Core repacking logic (cross-platform Python)
 │   └── gui.py                   # Tkinter GUI (cross-platform)
 ├── scripts/
-│   └── Repack-FromNspdCode.ps1  # Windows PowerShell version (fallback)
-├── nsp_repack_gui.py            # Entry point shim (backward compatible)
-├── Drag-NSPD-Here.cmd           # Windows drag-and-drop entry
+│   └── Repack-FromNspdCode.ps1  # Windows PowerShell fallback
+├── nsp_repack_gui.py            # Entry point shim
+├── Drag-NSPD-Here.cmd           # Windows drag-and-drop
 ├── build_exe.ps1                # PyInstaller build script
-├── pyproject.toml               # Python package definition
-├── requirements.txt             # Dependencies (only pyinstaller)
-├── .gitignore                   # Ignore runtime outputs
-├── README.md                    # This file
-└── USAGE_EN.md                  # (legacy English usage doc)
+├── pyproject.toml
+├── requirements.txt
+├── .gitignore
+└── README.md
 ```
 
 Runtime outputs:
 
-- `outputs/` — Generated NSP, NCAs, logs, manifest.json per run
+- `outputs/` — Generated NSP, NCAs, logs, and manifest.json per run
 - `work/` — Temporary working directory per run
 
 ## Usage
@@ -71,7 +80,7 @@ Drag the `.nspd` folder onto `Drag-NSPD-Here.cmd`.
 powershell -ExecutionPolicy Bypass -File .\build_exe.ps1
 ```
 
-All required external tools (hacpack, hactool, prod.keys) are already included under `Tools/` in this repository. No extra setup needed.
+All required tools (hacpack, hactool, prod.keys, and romfs_base) are included under `Tools/`. No extra setup needed.
 
 ## Cross-Platform Notes
 
