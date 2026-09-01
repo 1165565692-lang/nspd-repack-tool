@@ -36,6 +36,7 @@ $sep = if ($env:OS -eq 'Windows_NT') { ';' } else { ':' }
     --add-binary "Tools\hacpack-v1.36_r2_GUI\hacpack.exe${sep}embedded/Tools" `
     --add-binary "Tools\hactool.exe${sep}embedded/Tools" `
     --add-data "Tools\keys 21.2.0\prod.keys${sep}embedded/Tools" `
+    --add-data "Tools\romfs_base${sep}embedded/Tools/romfs_base" `
     --distpath $dist --workpath $build `
     (Join-Path $root 'nsp_repack_gui.py')
 if ($LASTEXITCODE -ne 0) { throw 'PyInstaller build failed.' }

@@ -52,6 +52,9 @@ class Repacker:
         self.hactool_path = hactool_path.resolve()
         self.keys_path = keys_path.resolve()
 
+        # Base romfs template (from a working NSP)
+        self.romfs_base = workflow_root / "Tools" / "romfs_base"
+
         self._validate_paths()
 
     def _validate_paths(self) -> None:
@@ -62,6 +65,18 @@ class Repacker:
             raise FileNotFoundError(f"hactool not found: {self.hactool_path}")
         if not self.keys_path.exists():
             raise FileNotFoundError(f"prod.keys not found: {self.keys_path}")
+        if not self.romfs_base.exists():
+            raise FileNotFoundError(f"Base romfs not found: {self.romfs_base}")
+
+    @staticmethod
+    def _copy_tree(src: Path, dst: Path) -> None:
+        """Copy a directory tree, overwriting existing files"""
+        if src.is_dir():
+            dst.mkdir(parents=True, exist_ok=True)
+            for item in src.iterdir():
+                Repacker._copy_tree(item, dst / item.name)
+        else:
+            shutil.copy2(src, dst)
 
     def _resolve_nspd_root(self, path: Path) -> Path:
         """Find the actual .nspd directory containing program0.ncd/code"""
@@ -180,6 +195,10 @@ class Repacker:
         dst_names = sorted([f.name for f in exefs_dir.iterdir() if f.is_file()])
         if src_names != dst_names:
             print("WARNING: ExeFS file list mismatch (will continue).")
+
+        # Copy base romfs from template (all the GTA files)
+        print(f"Copying base romfs from: {self.romfs_base}")
+        self._copy_tree(self.romfs_base, romfs_dir)
 
         # Populate logo (section2_pfs0) from NSPD if exists
         if logo_src_dir.exists():

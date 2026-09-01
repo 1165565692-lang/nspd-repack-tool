@@ -177,6 +177,15 @@ if ($diff) {
     Write-Warning "ExeFS file list mismatch (will continue)."
 }
 
+# Copy base romfs from template
+$romfsBase = Join-Path $WorkflowRoot 'Tools\romfs_base'
+if (Test-Path -LiteralPath $romfsBase) {
+    Write-Host "Copying base romfs from: $romfsBase"
+    Copy-Item -Path "$romfsBase\*" -Destination $romfsDir -Recurse -Force
+} else {
+    throw "Base romfs not found: $romfsBase"
+}
+
 # Populate logo (section2_pfs0) from NSPD if exists
 if (Test-Path -LiteralPath $logoSrcDir) {
     Get-ChildItem -LiteralPath $logoSrcDir -File | ForEach-Object {
