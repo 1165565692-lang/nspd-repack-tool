@@ -11,7 +11,7 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 from typing import Optional
 
-VERSION = "1.1"
+VERSION = "1.2"
 
 
 def _get_app_dir() -> Path:
