@@ -144,12 +144,10 @@ class Repacker:
         logo_src_dir = nspd_root / "program0.ncd" / "logo"
         control_src_dir = nspd_root / "control0.ncd" / "data"
 
-        # Check and warn about missing files, don't fail
-        required_code_files = ["main", "main.npdm", "rtld", "sdk", "subsdk0", "subsdk1", "subsdk2", "subsdk3"]
-        for fname in required_code_files:
-            fpath = code_dir / fname
-            if not fpath.exists():
-                print(f"WARNING: Optional code file missing (will continue): {fpath}")
+        # Check code directory is non-empty
+        code_files = [f for f in code_dir.iterdir() if f.is_file()]
+        if not code_files:
+            print(f"WARNING: No files found in code directory: {code_dir}")
 
         if not logo_src_dir.exists():
             print(f"WARNING: NSPD logo directory missing (will skip logo replacement): {logo_src_dir}")

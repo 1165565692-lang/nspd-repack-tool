@@ -123,12 +123,9 @@ $nspdRoot = Resolve-NspdRoot -Path $NspdPath
 $codeDir = Join-Path $nspdRoot 'program0.ncd\code'
 $logoSrcDir = Join-Path $nspdRoot 'program0.ncd\logo'
 $controlSrcDir = Join-Path $nspdRoot 'control0.ncd\data'
-$requiredCodeFiles = @('main', 'main.npdm', 'rtld', 'sdk', 'subsdk0', 'subsdk1', 'subsdk2', 'subsdk3')
-foreach ($file in $requiredCodeFiles) {
-    $path = Join-Path $codeDir $file
-    if (-not (Test-Path -LiteralPath $path)) {
-        Write-Warning "Optional code file missing (will continue): $path"
-    }
+$codeFiles = @(Get-ChildItem -LiteralPath $codeDir -File)
+if ($codeFiles.Count -eq 0) {
+    Write-Warning "No files found in code directory: $codeDir"
 }
 if (-not (Test-Path -LiteralPath $logoSrcDir)) {
     Write-Warning "NSPD logo directory missing (will skip logo replacement): $logoSrcDir"
